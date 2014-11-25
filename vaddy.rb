@@ -24,8 +24,10 @@ base_info = {
 
 
 # start scan
-start_query_hash = base_info
+puts "== Start Scan =="
+start_query_hash = base_info.dup
 start_query_hash["action"] = "start"
+
 start_url = API_SERVER + "/v1/scan"
 scan_id = start_scan(start_url, start_query_hash)
 
@@ -37,7 +39,7 @@ end
 sleep(5)
 
 # check status
-check_query_hash = base_info
+check_query_hash = base_info.dup
 check_query_hash["scan_id"] = scan_id
 
 query_string = build_query(check_query_hash)
