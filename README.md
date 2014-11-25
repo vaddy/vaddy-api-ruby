@@ -1,7 +1,8 @@
 vaddy-api-ruby
 ==============
 
-VAddy ruby client
+VAddy ruby client  
+http://vaddy.net
 
 ## Ruby version
 
