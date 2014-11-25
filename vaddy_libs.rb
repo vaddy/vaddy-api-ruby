@@ -13,7 +13,7 @@ def start_scan(request_url, start_query_hash)
   response = Net::HTTP.post_form(uri, start_query_hash)
   result = JSON.parse(response.body)
 
-  puts result
+  #puts result
   scan_id = result["scan_id"];
   return scan_id
 end
@@ -38,11 +38,11 @@ def vaddy_check(request_url)
     puts "----ERROR----"
     puts "status : #{result["status"]}"
     puts "problems : #{result["alert_count"]}"
-    puts result
+    #puts result
     return 1;
   else
     puts "SUCCESS. No problem."
-    puts result
+    #puts result
     return 0;
   end
   return 1;
