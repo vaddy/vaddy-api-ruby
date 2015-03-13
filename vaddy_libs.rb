@@ -36,8 +36,10 @@ def vaddy_check(request_url)
 
   if( result["alert_count"] == nil || result["alert_count"] > 0 ) then
     puts "----ERROR----"
-    puts "status : #{result["status"]}"
-    puts "problems : #{result["alert_count"]}"
+    puts "Server : #{result["fqdn"]}"
+    puts "Status : #{result["status"]}"
+    puts "Vulnerabilities: #{result["alert_count"]}"
+    puts "Report URL : #{result["scan_result_url"]}"
     #puts result
     return 1;
   else
