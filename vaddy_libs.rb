@@ -51,4 +51,23 @@ def vaddy_check(request_url)
 end
 
 
+def search_crawl(request_url, search_keyword, base_info)
+  query = base_info
+  query["search_label"] = search_keyword
+
+  query_string = build_query(query)
+  request_url = request_url + "?" + query_string
+  uri = URI.parse( request_url );
+
+  response = Net::HTTP.get(uri)
+  result = JSON.parse(response)
+
+  if(result["total"] == 0) then
+    return nil
+  end
+
+  return result["items"][0]["id"]
+end
+  
+
 

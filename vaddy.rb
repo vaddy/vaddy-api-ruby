@@ -23,14 +23,21 @@ base_info = {
   "fqdn"     => vaddy_host,
 }
 
+# Set CrawlID
+crawl_id = nil
+if( vaddy_crawl != nil && vaddy_crawl.match(/\A\d+\Z/)) then
+  crawl_id = vaddy_crawl
+elsif(vaddy_crawl != nil) then
+  crawl_api_url = API_SERVER + "/v1/crawl"
+  crawl_id = search_crawl(crawl_api_url, vaddy_crawl, base_info)
+end
+
 
 # start scan
 puts "== Start Scan =="
 start_query_hash = base_info.dup
 start_query_hash["action"] = "start"
-if( vaddy_crawl != nil )
-  start_query_hash["crawl_id"] = vaddy_crawl
-end
+start_query_hash["crawl_id"] = crawl_id
 
 start_url = API_SERVER + "/v1/scan"
 scan_id = start_scan(start_url, start_query_hash)

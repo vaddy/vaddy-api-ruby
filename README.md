@@ -1,3 +1,4 @@
+
 vaddy-api-ruby
 ==============
 
@@ -6,23 +7,30 @@ http://vaddy.net
 
 ## Ruby version
 
-Ruby2.0 or high  
+Ruby2.0 or higher  
 
 
 ## Usage 
-###Argument with the latest crawl_id
+###Argument without crawl_id
+If you don't specify the crawl_id option, the latest crawl_id is used for scan.
 
-ruby vaddy.rb auth_key username(LoginID)  hostname
+Usage: ruby vaddy.rb auth_key username(LoginID)  hostname
 
-ex. ruby vaddy.rb 123455667789  ichikaway  www.examplevaddy.net 
+    ruby vaddy.rb 123455667789  ichikaway  www.examplevaddy.net 
 
 
 ###Argument with the crawl_id
 
-ruby vaddy.rb auth_key username(LoginID)  hostname crawl_id(optional)
+Usage: ruby vaddy.rb auth_key username(LoginID)  hostname crawl_id(optional)
 
-ex. ruby vaddy.rb 123455667789  ichikaway  www.examplevaddy.net 30
+    ruby vaddy.rb 123455667789  ichikaway  www.examplevaddy.net 30
 
+
+###Argument with the crawl label keyword
+
+Usage: ruby vaddy.rb auth_key username(LoginID)  hostname crawl_label_keyword
+
+    ruby vaddy.rb 123455667789  ichikaway  www.examplevaddy.net useredit
 
 
 ### ENV
