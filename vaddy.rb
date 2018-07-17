@@ -3,17 +3,18 @@ require 'uri'
 require 'json'
 require './vaddy_libs.rb'
 
-API_SERVER = 'https://api.vaddy.net';
+API_SERVER = "https://" + (ENV["VADDY_API_SERVER"] || 'api.vaddy.net')
 
 vaddy_token = ARGV[0] != nil ? ARGV[0] : ENV["VADDY_TOKEN"];
 vaddy_user  = ARGV[1] != nil ? ARGV[1] : ENV["VADDY_USER"];
 vaddy_host  = ARGV[2] != nil ? ARGV[2] : ENV["VADDY_HOST"];
 vaddy_crawl = ARGV[3] != nil ? ARGV[3] : ENV["VADDY_CRAWL_ID"];
+vaddy_project_id = ENV["VADDY_PROJECT_ID"];
 
-if( vaddy_token == nil || vaddy_user == nil || vaddy_host == nil) then
+if vaddy_token == nil || vaddy_user == nil || (vaddy_host == nil && vaddy_project_id == nil)
   puts "ERROR: need more argument or env."
   puts "USAGE: ruby vaddy.rb auth_key username host"
-  puts "or set env VADDY_TOKEN, VADDY_USER and VADDY_HOST"
+  puts "or set env VADDY_TOKEN, VADDY_USER and VADDY_HOST or VADDY_PROJECT_ID"
   exit(1)
 end
 
@@ -22,13 +23,17 @@ base_info = {
   "user"     => vaddy_user,
   "fqdn"     => vaddy_host,
 }
+base_info[:project_id] = vaddy_project_id unless vaddy_project_id.nil?
+
+# Detect API version
+api_version = vaddy_project_id.nil? ? "v1" : "v2"
 
 # Set CrawlID
 crawl_id = nil
 if( vaddy_crawl != nil && vaddy_crawl.match(/\A\d+\Z/)) then
   crawl_id = vaddy_crawl
 elsif(vaddy_crawl != nil) then
-  crawl_api_url = API_SERVER + "/v1/crawl"
+  crawl_api_url = API_SERVER + "/" + api_version + "/crawl"
   crawl_id = search_crawl(crawl_api_url, vaddy_crawl, base_info)
 end
 
@@ -39,7 +44,7 @@ start_query_hash = base_info.dup
 start_query_hash["action"] = "start"
 start_query_hash["crawl_id"] = crawl_id
 
-start_url = API_SERVER + "/v1/scan"
+start_url = API_SERVER + "/" + api_version + "/scan"
 scan_id = start_scan(start_url, start_query_hash)
 
 if( scan_id == nil )
@@ -54,7 +59,7 @@ check_query_hash = base_info.dup
 check_query_hash["scan_id"] = scan_id
 
 query_string = build_query(check_query_hash)
-check_request_url = API_SERVER + "/v1/scan/result?" + query_string
+check_request_url = API_SERVER + "/" + api_version + "/scan/result?" + query_string
 status = vaddy_check( check_request_url )
 exit(status)
 
